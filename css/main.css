@@ -1,0 +1,23 @@
+body {
+	padding-top: 50px;
+}
+
+.principal {
+	padding: 40px 15px;
+}
+.colorQuestion{
+	background-color: #337ab7;
+}
+
+.colorResponse{
+	background-color:#EFF5FB;
+}
+
+.alert-danger,.alert-success{
+	text-align: center;
+	font-size: 16px;
+}
+h1, th, .listaCategoria{
+	text-align: center;
+}
+
