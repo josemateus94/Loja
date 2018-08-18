@@ -2,7 +2,7 @@
 
 require_once('Conexao.php'); 
 
-class BancoCategoria{
+class CategoriaDao{
 	private $conexao;
 	private $pdo;
 
@@ -11,7 +11,7 @@ class BancoCategoria{
 		$this->pdo = $this->conexao->conectar();
 	}
 
-	function listaCategoria(){
+	public function listaCategoria(){
         try {
             $categorias = $this->pdo->prepare("SELECT * FROM categorias");
             if ($categorias->execute()) {

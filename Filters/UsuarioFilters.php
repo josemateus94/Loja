@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once("../Lang/Mensagens.php");
-class Usuario{
+class UsuarioFilters{
     
     public static function usuarioEstaLogado(){
         return (isset($_SESSION['usuario_logado']));

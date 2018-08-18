@@ -1,6 +1,6 @@
 <?php  
 error_reporting(E_ALL ^ E_NOTICE);
-require_once("../Mensagem/MensagemAlerta.php"); 
+require_once("../Message/MensagemAlerta.php"); 
 ?>
 <html>
 <head>

@@ -1,8 +1,6 @@
 <?php 
 require_once("Cabecalho.php");
-require_once("../Dao/ProdutoDao.php");
 require_once("../Filters/UsuarioFilters.php");
-require_once("../Model/Produto.php");
 require_once("../Controller/ProdutoController.php");
 
 $produtoController = new ProdutoController();
@@ -15,8 +13,10 @@ $produtoController = new ProdutoController();
         <th>Desconto</th>
         <th>Descrição</th>
         <th>Categoria</th>
-        <th>Novo/Usado</th>
-        <?php if(Usuario::usuarioEstaLogado()): ?>
+        <th>Novo/Usado</th>       
+        <th>Tipo Produto</th>
+        <th>Isbn</th>
+        <?php if(UsuarioFilters::usuarioEstaLogado()): ?>
             <th colspan="2">Ação</th>
         <?php endif ?>
     <tr>
@@ -30,7 +30,9 @@ $produtoController = new ProdutoController();
                 <td><?= substr($produto->getDescricao(), 0, 40) ?></td>
                 <td><?= $produto->getCategoria()->getNome(); ?></td>
                 <td><?= ($produto->getUsado() == 1) ? "usado" : "novo"; ?></td>
-                <?php if(Usuario::usuarioEstaLogado()): ?>
+                <td><?= $produto->getTipoProduto(); ?></td>
+                <td><?= $produto->getIsbn(); ?></td>
+                <?php if(UsuarioFilters::usuarioEstaLogado()): ?>
                     <td>
                         <form action="ProdutoFormulario.php" method="post">
                             <input type="hidden" name="id" value="<?= $produto->getId(); ?>"/>
