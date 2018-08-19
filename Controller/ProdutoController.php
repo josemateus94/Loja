@@ -28,16 +28,16 @@ class ProdutoController{
         $preco = $_POST["preco"];
         $descricao = $_POST["descricao"];
         $usado = (isset($_POST['usado']) ? $_POST['usado']: 0);
-        $tipoProduto = $_POST['tipoProduto'];
-
-        $this->categoria->setId($_POST["categoria_id"]);
-        $produto = new Produto($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);    
-        $produto->setId($_POST['id']);
-        if ($tipoProduto == 'produto') {
-            $produto->setIsbn(null);
+        $tipoProduto = $_POST['tipoProduto'];    
+        $this->categoria->setId($_POST["categoria_id"]);            
+        
+        if ($tipoProduto == 'Produto') {
+            $produto = new Produto($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
         }else{
+            $produto = new Livro($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
             $produto->setIsbn($_POST['isbn']);
         }
+        $produto->setId($_POST['id']);
         if ($this->produtoDao->updade_produto($produto)) {	
             $_SESSION['success'] = Mensagens::$alterarProduto;
             header("Location: ../View/ProdutoLista.php");
@@ -56,11 +56,14 @@ class ProdutoController{
         $usado = isset($_POST['usado']) ? $_POST['usado']: 0;
         $isbn =  !empty($_POST['isbn']) ? $_POST['isbn'] : null;
         $tipoProduto = $_POST['tipoProduto'];
-
+        
         $this->categoria->setId($_POST["categoria_id"]);
-            $produto = new Produto($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
+        if ($tipoProduto == "Livro") {
+            $produto = new Livro($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
             $produto->setIsbn($isbn);
-
+        }else{
+            $produto = new Produto($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
+        }
         if($this->produtoDao->insereProduto($produto)) { 
             $_SESSION['success'] = Mensagens::$adicionarProduto."".$produto->getNome();
             header("Location: ../View/ProdutoLista.php").
@@ -81,14 +84,17 @@ class ProdutoController{
             $descricao = $listaproduto['descricao'];
             $usado = $listaproduto['usado'];
             $tipoProduto = $listaproduto['tipoProduto'];
-
-            $categoria = new Categoria();
-            $categoria->setNome($listaproduto['categoria_nome']);
-            $produto = new Produto($nome, $preco, $descricao, $categoria, $usado, $tipoProduto);
+            $isbn = $listaproduto['isbn'];
+            $this->categoria->setNome($listaproduto['categoria_nome']);            
+            if ($tipoProduto == "Livro") {
+                $produto = new Livro($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
+                $produto->setIsbn($isbn);
+            }else{
+                $produto = new Produto($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
+            }            
             $produto->setId($listaproduto['id']);
-            $produto->setIsbn($listaproduto['isbn']);
-            
             array_push($produtos, $produto);
+            $this->categoria = new Categoria();
         }
         return $produtos;
     }

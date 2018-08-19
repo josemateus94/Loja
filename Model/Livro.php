@@ -4,7 +4,6 @@ class Livro extends Produto{
 
     private $isbn;
 
-    
     public function getIsbn(){
         return $this->isbn;
     }

@@ -19,7 +19,7 @@ $produto = array(new Produto(null, null, null, $categoria, null, null));
 $usado="";
 if ($id) {
     $pc = new ProdutoController();  
-    $produto = $pc->lista($id);   
+    $produto = $pc->lista($id);
 }
 ?>
 
@@ -40,7 +40,7 @@ if ($id) {
         </tr>
         <tr>
             <td></td>
-            <td><input type="checkbox" name="usado" <?= $produto[0]->getUsado(); ?> value="1" id="usado"><label for="usado">Usado</label></td>
+            <td><input type="checkbox" name="usado" <?= ($produto[0]->getUsado()== 1)? "checked":""; ?> value="1" id="usado"><label for="usado">Usado</label></td>
         </tr>
         <tr> 
             <td>Categoria</td>
@@ -61,7 +61,7 @@ if ($id) {
             <td onclick="ativo()" onkeyup="ativo()">                
                 <select name="tipoProduto" id="tipoProduto">                    
                     <?php
-                        $tipos = array('produto', 'livro');                        
+                        $tipos = array('Produto', 'Livro');                        
                         foreach($tipos as $key=>$tipo): 
                         $tipoProduto = $produto[0]->getTipoProduto() == $tipo;
                     ?>
@@ -75,7 +75,7 @@ if ($id) {
         <tr id = "isbn" class="ativo">        
             <td>Isbn</td>
             <td>
-                <input class="form form-control" name="isbn" value="<?= $produto[0]->getIsbn(); ?>" id="isbn">
+                <input class="form form-control" name="isbn" value="<?php if($produto[0]->isIsbn()){ echo($produto[0]->getIsbn());} ?>" id="isbn">
             </td>
         <tr>
         <tr> 
@@ -90,13 +90,13 @@ if ($id) {
 
 <script>
     function ativo(){
-        if ($("#tipoProduto").val() == "livro") {
+        if ($("#tipoProduto").val() == "Livro") {
             $("#isbn").removeClass("ativo");
         }else{
             $("#isbn").addClass("ativo");
         }
     }
-    if ($("#tipoProduto").val() == "livro") {
+    if ($("#tipoProduto").val() == "Livro") {
             $("#isbn").removeClass("ativo");
     }
 </script>

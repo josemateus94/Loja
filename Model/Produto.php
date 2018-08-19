@@ -50,22 +50,16 @@ class Produto{
         return $this->categoria;
     }
 
-    public function setUsado($usado){
-        $this->usado = $usado;
-    }
     public function getUsado(){
         return $this->usado;
-    }
-
-    public function setIsbn($isnb){
-        $this->isnb = $isnb;
-    }
-    public function getIsbn(){
-        return $this->isnb;
     }
    
     public function getTipoProduto(){
         return $this->tipoProduto;
+    }
+
+    public function isIsbn(){
+        return $this instanceof Livro;
     }
 }
 

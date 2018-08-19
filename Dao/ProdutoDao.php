@@ -33,6 +33,13 @@ class ProdutoDao{
     }
 
     function insereProduto(Produto $produto){
+
+        if ($produto->isIsbn()) {
+            $isbn = $produto->getIsbn($isbn);
+        }else{
+            $isbn = null;
+        }
+        
         try {
             $pdt = $this->pdo->prepare("INSERT INTO produtos (nome,preco,descricao,categoria_id, usado, isbn, tipoProduto)
                                         VALUES (:nome,:preco,:descricao,:categoria_id,:usado, :isbn, :tipoProduto)");
@@ -41,7 +48,7 @@ class ProdutoDao{
             $pdt->bindParam(":descricao",  $produto->getDescricao(), PDO::PARAM_STR);
             $pdt->bindParam(":categoria_id",  $produto->getCategoria()->getId(), PDO::PARAM_STR);
             $pdt->bindParam(":usado",  $produto->getUsado(), PDO::PARAM_BOOL);
-            $pdt->bindParam(":isbn", $produto->getIsbn(), PDO::PARAM_STR);
+            $pdt->bindParam(":isbn", $isbn, PDO::PARAM_STR);
             $pdt->bindParam(":tipoProduto", $produto->getTipoProduto(), PDO::PARAM_STR);
 
             if($pdt->execute()){
@@ -71,7 +78,12 @@ class ProdutoDao{
 
 
     function updade_produto(Produto $produto){
-        
+
+        if ($produto->isIsbn()) {
+            $isbn = $produto->getIsbn($isbn);
+        }else{
+            $isbn = null;
+        }
         try {
             $pdt = $this->pdo->prepare("UPDATE produtos SET nome = :nome, preco = :preco, 
                                         descricao = :descricao, categoria_id = :categoria_id, usado = :usado , isbn = :isbn, tipoProduto = :tipoProduto
@@ -82,7 +94,7 @@ class ProdutoDao{
             $pdt->bindParam(":categoria_id", $produto->getCategoria()->getId(), PDO::PARAM_INT);
             $pdt->bindParam(":usado", $produto->getUsado(), PDO::PARAM_BOOL);
             $pdt->bindParam(":id", $produto->getId(), PDO::PARAM_INT);
-            $pdt->bindParam(":isbn", $produto->getIsbn(), PDO::PARAM_STR);
+            $pdt->bindParam(":isbn", $isbn, PDO::PARAM_STR);
             $pdt->bindParam(":tipoProduto", $produto->getTipoProduto(), PDO::PARAM_STR);
 
             if ($pdt->execute()) {
