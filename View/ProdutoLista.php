@@ -17,6 +17,7 @@ $produtoController = new ProdutoController();
         <th>Tipo Produto</th>
         <th>Isbn</th>
         <?php if(UsuarioFilters::usuarioEstaLogado()): ?>
+            <th>Imposto Sobre o Item</th>
             <th colspan="2">Ação</th>
         <?php endif ?>
     <tr>
@@ -33,6 +34,7 @@ $produtoController = new ProdutoController();
                 <td><?= $produto->getTipoProduto(); ?></td>
                 <td><?php if($produto->isIsbn()){ echo($produto->getIsbn());} ?></td>
                 <?php if(UsuarioFilters::usuarioEstaLogado()): ?>
+                    <td><?= $produto->impostoSobreItem(); ?></td>
                     <td>
                         <form action="ProdutoFormulario.php" method="post">
                             <input type="hidden" name="id" value="<?= $produto->getId(); ?>"/>

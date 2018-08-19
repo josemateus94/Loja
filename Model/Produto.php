@@ -21,10 +21,11 @@ class Produto{
     }
 
     public function precoDesconto($desconto=0.1){
+
         if ($desconto>0 && $desconto <= 0.5) {            
-            $this->preco -= $this->preco * $desconto;            
+            $desconto = $this->preco - ($this->preco * $desconto);            
         }
-        return $this->preco;
+        return $desconto;
     }
 
     public function setId($id){
@@ -60,6 +61,10 @@ class Produto{
 
     public function isIsbn(){
         return $this instanceof Livro;
+    }
+
+    public function impostoSobreItem(){
+        return round($this->preco * 0.195, 2);
     }
 }
 
