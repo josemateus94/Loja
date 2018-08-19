@@ -80,14 +80,27 @@ class ProdutoDao{
     function updade_produto(Produto $produto){
 
         if ($produto->isIsbn()) {
-            $isbn = $produto->getIsbn($isbn);
+            $isbn = $produto->getIsbn();
         }else{
             $isbn = null;
         }
+
+        if ($produto->isTaxaImpressao()) {
+            $taxaImpressao = $produto->getTaxaImpressao();
+        }else{
+            $taxaImpressao = null;
+        }
+
+        if ($produto->isWaterMark()) {
+            $waterMark = $produto->getWaterMark();
+        }else{
+            $waterMark = null;
+        }
+
         try {
             $pdt = $this->pdo->prepare("UPDATE produtos SET nome = :nome, preco = :preco, 
-                                        descricao = :descricao, categoria_id = :categoria_id, usado = :usado , isbn = :isbn, tipoProduto = :tipoProduto
-                                        WHERE id = :id;");
+                                        descricao = :descricao, categoria_id = :categoria_id, usado = :usado , isbn = :isbn, tipoProduto = :tipoProduto,
+                                        waterMark = :waterMark, taxaImpressao = :taxaImpressao WHERE id = :id;");
             $pdt->bindParam(":nome", $produto->getNome(), PDO::PARAM_STR);
             $pdt->bindParam(":preco", $produto->getPreco(), PDO::PARAM_STR);
             $pdt->bindParam(":descricao", $produto->getDescricao(), PDO::PARAM_STR);
@@ -96,6 +109,8 @@ class ProdutoDao{
             $pdt->bindParam(":id", $produto->getId(), PDO::PARAM_INT);
             $pdt->bindParam(":isbn", $isbn, PDO::PARAM_STR);
             $pdt->bindParam(":tipoProduto", $produto->getTipoProduto(), PDO::PARAM_STR);
+            $pdt->bindParam(":waterMark", $waterMark, PDO::PARAM_STR);
+            $pdt->bindParam(":taxaImpressao", $taxaImpressao, PDO::PARAM_STR);
 
             if ($pdt->execute()) {
                 return true;

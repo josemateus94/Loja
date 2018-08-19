@@ -29,14 +29,22 @@ class ProdutoController{
         $descricao = $_POST["descricao"];
         $usado = (isset($_POST['usado']) ? $_POST['usado']: 0);
         $tipoProduto = $_POST['tipoProduto'];    
-        $this->categoria->setId($_POST["categoria_id"]);            
+        $this->categoria->setId($_POST["categoria_id"]);
+        $taxaImpressao = $_POST['taxaImpressao'];
+        $waterMark = $_POST['$waterMark'];
         
-        if ($tipoProduto == 'Produto') {
-            $produto = new Produto($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
+        if ($tipoProduto == "LivroFisico") {
+            $produto = new LivroFisico($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
+            $produto->setIsbn($isbn);
+            $produto->setTaxaImpressao($taxaImpressao);
+        }else if ($tipoProduto == "Ebook") {
+            $produto = new Ebook($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
+            $produto->setIsbn($isbn);
+            $produto->setWaterMark($waterMark);
         }else{
-            $produto = new Livro($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
-            $produto->setIsbn($_POST['isbn']);
+            $produto = new Produto($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
         }
+        
         $produto->setId($_POST['id']);
         if ($this->produtoDao->updade_produto($produto)) {	
             $_SESSION['success'] = Mensagens::$alterarProduto;
@@ -56,14 +64,20 @@ class ProdutoController{
         $usado = isset($_POST['usado']) ? $_POST['usado']: 0;
         $isbn =  !empty($_POST['isbn']) ? $_POST['isbn'] : null;
         $tipoProduto = $_POST['tipoProduto'];
-        
         $this->categoria->setId($_POST["categoria_id"]);
-        if ($tipoProduto == "Livro") {
-            $produto = new Livro($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
+
+        if ($tipoProduto == "LivroFisico") {
+            $produto = new LivroFisico($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
             $produto->setIsbn($isbn);
+            $produto->setTaxaImpressao($taxaImpressao);
+        }else if ($tipoProduto == "Ebook") {
+            $produto = new Ebook($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
+            $produto->setIsbn($isbn);
+            $produto->setWaterMark($waterMark);
         }else{
             $produto = new Produto($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
         }
+
         if($this->produtoDao->insereProduto($produto)) { 
             $_SESSION['success'] = Mensagens::$adicionarProduto."".$produto->getNome();
             header("Location: ../View/ProdutoLista.php").

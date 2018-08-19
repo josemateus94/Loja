@@ -15,7 +15,9 @@ descricao varchar(255) not null,
 usado Integer unsigned not null,
 categoria_id Integer unsigned not null,
 isbn varchar(255),
-tipoProduto varchar(255) not null
+tipoProduto varchar(255) not null,
+waterMark varchar(255),
+taxaImpressao varchar(255),
 foreign key(categoria_id) references categorias(id)
 )engine = InnoDB;
 

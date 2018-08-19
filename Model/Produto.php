@@ -63,6 +63,14 @@ class Produto{
         return $this instanceof Livro;
     }
 
+    public function isTaxaImpressao(){
+        return $this instanceof TaxaImpressao;
+    }
+    
+    public function isWaterMark(){
+        return $this instanceof Ebook;
+    }
+
     public function impostoSobreItem(){
         return round($this->preco * 0.195, 2);
     }
