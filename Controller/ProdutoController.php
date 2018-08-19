@@ -5,6 +5,9 @@ require_once("../Lang/Mensagens.php");
 require_once("../Model/Produto.php");
 require_once("../Model/Categoria.php");
 require_once("../Model/Livro.php");
+require_once("../Model/LivroFisico.php");
+require_once("../Model/Ebook.php");
+require_once("CriadorProdutos.php");
 
 class ProdutoController{
     
@@ -24,26 +27,15 @@ class ProdutoController{
     }
     
     public function alterar(){
-        $nome = $_POST["nome"];
-        $preco = $_POST["preco"];
-        $descricao = $_POST["descricao"];
-        $usado = (isset($_POST['usado']) ? $_POST['usado']: 0);
-        $tipoProduto = $_POST['tipoProduto'];    
+        $isbn =  !empty($_POST['isbn']) ? $_POST['isbn'] : null;
+        $tipoProduto = $_POST['tipoProduto'];
         $this->categoria->setId($_POST["categoria_id"]);
-        $taxaImpressao = $_POST['taxaImpressao'];
-        $waterMark = $_POST['$waterMark'];
+        $waterMark =  !empty($_POST['waterMark']) ? $_POST['waterMark'] : null;
+        $impostoSobreItem =  !empty($_POST['taxaImpressao']) ? $_POST['taxaImpressao'] : null;
         
-        if ($tipoProduto == "LivroFisico") {
-            $produto = new LivroFisico($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
-            $produto->setIsbn($isbn);
-            $produto->setTaxaImpressao($taxaImpressao);
-        }else if ($tipoProduto == "Ebook") {
-            $produto = new Ebook($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
-            $produto->setIsbn($isbn);
-            $produto->setWaterMark($waterMark);
-        }else{
-            $produto = new Produto($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
-        }
+        $criadorProdutos = new CriadorProdutos();
+        $produto = $criadorProdutos->criaPor($tipoProduto, $_POST, $this->categoria);
+        $criadorProdutos->atualizaDados($produto, $isbn, $waterMark, $impostoSobreItem);
         
         $produto->setId($_POST['id']);
         if ($this->produtoDao->updade_produto($produto)) {	
@@ -57,27 +49,17 @@ class ProdutoController{
         }
     }
     
-    public function adicionar(){
-        $nome = $_POST["nome"];
-        $preco = $_POST["preco"];
-        $descricao = $_POST["descricao"];
-        $usado = isset($_POST['usado']) ? $_POST['usado']: 0;
+    public function adicionar(){                
         $isbn =  !empty($_POST['isbn']) ? $_POST['isbn'] : null;
         $tipoProduto = $_POST['tipoProduto'];
         $this->categoria->setId($_POST["categoria_id"]);
-
-        if ($tipoProduto == "LivroFisico") {
-            $produto = new LivroFisico($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
-            $produto->setIsbn($isbn);
-            $produto->setTaxaImpressao($taxaImpressao);
-        }else if ($tipoProduto == "Ebook") {
-            $produto = new Ebook($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
-            $produto->setIsbn($isbn);
-            $produto->setWaterMark($waterMark);
-        }else{
-            $produto = new Produto($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
-        }
-
+        $waterMark =  !empty($_POST['waterMark']) ? $_POST['waterMark'] : null;
+        $impostoSobreItem =  !empty($_POST['taxaImpressao']) ? $_POST['taxaImpressao'] : null;
+        
+        $criadorProdutos = new CriadorProdutos();
+        $produto = $criadorProdutos->criaPor($tipoProduto, $_POST, $this->categoria);
+        $criadorProdutos->atualizaDados($produto, $isbn, $waterMark, $impostoSobreItem);
+        
         if($this->produtoDao->insereProduto($produto)) { 
             $_SESSION['success'] = Mensagens::$adicionarProduto."".$produto->getNome();
             header("Location: ../View/ProdutoLista.php").
@@ -90,22 +72,20 @@ class ProdutoController{
     }
     
     public function lista($id=null){
-        $produtos = array();
+        $produtos = array();   
         $listaprodutos = $this->produtoDao->listaProdutos($id);
-        foreach($listaprodutos as $listaproduto){ 
-            $nome = $listaproduto['nome'];                     
-            $preco = $listaproduto['preco'];
-            $descricao = $listaproduto['descricao'];
-            $usado = $listaproduto['usado'];
+        foreach($listaprodutos as $listaproduto){            
+            $isbn =  !empty($listaproduto['isbn']) ? $listaproduto['isbn'] : null;
             $tipoProduto = $listaproduto['tipoProduto'];
-            $isbn = $listaproduto['isbn'];
-            $this->categoria->setNome($listaproduto['categoria_nome']);            
-            if ($tipoProduto == "Livro") {
-                $produto = new Livro($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
-                $produto->setIsbn($isbn);
-            }else{
-                $produto = new Produto($nome, $preco, $descricao, $this->categoria, $usado, $tipoProduto);
-            }            
+            $waterMark =  !empty($listaproduto['waterMark']) ? $listaproduto['waterMark'] : null;
+            $impostoSobreItem =  !empty($listaproduto['taxaImpressao']) ? $listaproduto['taxaImpressao'] : null;
+            $this->categoria->setNome($listaproduto['categoria_nome']); 
+            $itens = array("nome"=>$listaproduto['nome'], "preco"=> $listaproduto['preco'], "descricao"=> $listaproduto['descricao'], 
+                            "usado"=> $listaproduto['usado']);
+            $criadorProdutos = new CriadorProdutos();
+            $produto = $criadorProdutos->criaPor($tipoProduto, $itens, $this->categoria);
+            $criadorProdutos->atualizaDados($produto, $isbn, $waterMark, $impostoSobreItem);   
+            
             $produto->setId($listaproduto['id']);
             array_push($produtos, $produto);
             $this->categoria = new Categoria();

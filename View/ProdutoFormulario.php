@@ -82,7 +82,7 @@ if ($id) {
         <tr id = "taxaImpressao" class="ativo">        
             <td>taxaImpressao</td>
             <td>
-                <input class="form form-control" name="taxaImpressao" value="<?php if($produto[0]->isTaxaImpressao()){ echo($produto[0]->getTaxaImpressao());} ?>" id="taxaImpressao">
+                <input class="form form-control" name="taxaImpressao" value="<?php if($produto[0]->isTaxaImpressao()){ echo($produto[0]->getTaxaImpressoa());} ?>" id="taxaImpressao">
             </td>
         <tr>
         <tr id = "waterMark" class="ativo">        

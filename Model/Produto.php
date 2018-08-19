@@ -64,7 +64,7 @@ class Produto{
     }
 
     public function isTaxaImpressao(){
-        return $this instanceof TaxaImpressao;
+        return $this instanceof LivroFisico;
     }
     
     public function isWaterMark(){

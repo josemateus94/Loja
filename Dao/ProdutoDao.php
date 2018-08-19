@@ -39,10 +39,22 @@ class ProdutoDao{
         }else{
             $isbn = null;
         }
+
+        if ($produto->isTaxaImpressao()) {
+            $taxaImpressao = $produto->getTaxaImpressoa();
+        }else{
+            $taxaImpressao = null;
+        }
+
+        if ($produto->isWaterMark()) {
+            $waterMark = $produto->getWaterMark();
+        }else{
+            $waterMark = null;
+        }
         
         try {
-            $pdt = $this->pdo->prepare("INSERT INTO produtos (nome,preco,descricao,categoria_id, usado, isbn, tipoProduto)
-                                        VALUES (:nome,:preco,:descricao,:categoria_id,:usado, :isbn, :tipoProduto)");
+            $pdt = $this->pdo->prepare("INSERT INTO produtos (nome,preco,descricao,categoria_id, usado, isbn, tipoProduto, waterMark, taxaImpressao)
+                                        VALUES (:nome,:preco,:descricao,:categoria_id,:usado, :isbn, :tipoProduto, :waterMark, :taxaImpressao)");
             $pdt->bindParam(":nome", $produto->getNome(), PDO::PARAM_STR);
             $pdt->bindParam(":preco",  $produto->getPreco(), PDO::PARAM_STR);
             $pdt->bindParam(":descricao",  $produto->getDescricao(), PDO::PARAM_STR);
@@ -50,6 +62,8 @@ class ProdutoDao{
             $pdt->bindParam(":usado",  $produto->getUsado(), PDO::PARAM_BOOL);
             $pdt->bindParam(":isbn", $isbn, PDO::PARAM_STR);
             $pdt->bindParam(":tipoProduto", $produto->getTipoProduto(), PDO::PARAM_STR);
+            $pdt->bindParam(":waterMark", $waterMark, PDO::PARAM_STR);
+            $pdt->bindParam(":taxaImpressao", $taxaImpressao, PDO::PARAM_STR);
 
             if($pdt->execute()){
                 return true;    
@@ -77,8 +91,7 @@ class ProdutoDao{
     }
 
 
-    function updade_produto(Produto $produto){
-
+    function updade_produto(Produto $produto){        
         if ($produto->isIsbn()) {
             $isbn = $produto->getIsbn();
         }else{
@@ -86,7 +99,7 @@ class ProdutoDao{
         }
 
         if ($produto->isTaxaImpressao()) {
-            $taxaImpressao = $produto->getTaxaImpressao();
+            $taxaImpressao = $produto->getTaxaImpressoa();
         }else{
             $taxaImpressao = null;
         }
