@@ -14,7 +14,7 @@ $action = "../Routes/Routes.php";
 
 $categoria = new Categoria();
 $categoria->setId(1); 
-$produto = array(new Produto(null, null, null, $categoria, null, null));
+$produto = array(new LivroFisico(null, null, null, $categoria, null, null));
 
 $usado="";
 if ($id) {
@@ -61,7 +61,7 @@ if ($id) {
             <td onclick="ativo()" onkeyup="ativo()">                
                 <select name="tipoProduto" id="tipoProduto">                    
                     <?php
-                        $tipos = array('Produto', 'Livro Fisico', 'Ebook');                        
+                        $tipos = array('Livro Fisico', 'Ebook');                        
                         foreach($tipos as $key=>$tipo):
                             $tipoSemEspaco = str_replace(" ", "", $tipo);
                         $tipoProduto = $produto[0]->getTipoProduto() == $tipoSemEspaco;
@@ -73,22 +73,22 @@ if ($id) {
                 </select>                        
             </td>
         </tr>
-        <tr id = "isbn" class="ativo">        
+        <tr id = "isbn">        
             <td>Isbn</td>
             <td>
                 <input class="form form-control" name="isbn" value="<?php if($produto[0]->isIsbn()){ echo($produto[0]->getIsbn());} ?>" id="isbn">
             </td>
         <tr>
         <tr id = "taxaImpressao" class="ativo">        
-            <td>taxaImpressao</td>
+            <td>TaxaImpressao</td>
             <td>
-                <input class="form form-control" name="taxaImpressao" value="<?php if($produto[0]->isTaxaImpressao()){ echo($produto[0]->getTaxaImpressoa());} ?>" id="taxaImpressao">
+                <input type="number" class="form form-control" name="taxaImpressao" min="1" max="20" value="<?php if($produto[0]->isTaxaImpressao()){ echo($produto[0]->getTaxaImpressoa());} ?>" id="taxaImpressao">
             </td>
         <tr>
         <tr id = "waterMark" class="ativo">        
-            <td>waterMark</td>
+            <td>WaterMark</td>
             <td>
-                <input class="form form-control" name="waterMark" value="<?php if($produto[0]->isWaterMark()){ echo($produto[0]->getWaterMark());} ?>" id="waterMark">
+                <input type="number" class="form form-control" name="waterMark" min="1" max="20" value="<?php if($produto[0]->isWaterMark()){ echo($produto[0]->getWaterMark());} ?>" id="waterMark">
             </td>
         <tr>    
         <tr> 
@@ -104,37 +104,18 @@ if ($id) {
 <script>
     function ativo(){
         if ($("#tipoProduto").val() == "LivroFisico") {
-            console.log($("#tipoProduto").val());
-            $("#isbn").removeClass("ativo");
             $("#taxaImpressao").removeClass("ativo");
             $("#waterMark").addClass("ativo");
-
         } else if ($("#tipoProduto").val() == "Ebook") {
-            console.log($("#tipoProduto").val());
-            $("#isbn").removeClass("ativo");
             $("#waterMark").removeClass("ativo");
-            $("#taxaImpressao").addClass("ativo");
-
-        }else{
-            console.log($("#tipoProduto").val());
-            $("#isbn").addClass("ativo");
-            $("#waterMark").addClass("ativo");
             $("#taxaImpressao").addClass("ativo");
         }
     }
-
     if ($("#tipoProduto").val() == "LivroFisico") {
-
-        $("#isbn").removeClass("ativo");
         $("#taxaImpressao").removeClass("ativo");
         $("#waterMark").addClass("ativo");
-
     } else if ($("#tipoProduto").val() == "Ebook") {
-
-        $("#isbn").removeClass("ativo");
         $("#waterMark").removeClass("ativo");
         $("#taxaImpressao").addClass("ativo");
-
     }
-
 </script>

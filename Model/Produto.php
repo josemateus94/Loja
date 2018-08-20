@@ -1,6 +1,6 @@
 <?php
 
-class Produto{
+abstract class Produto{
     
     private $id;
     private $nome;
@@ -74,6 +74,8 @@ class Produto{
     public function impostoSobreItem(){
         return round($this->preco * 0.195, 2);
     }
+
+    abstract function atualizaDados($produto, $isbn, $dado);
 }
 
 ?>
