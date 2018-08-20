@@ -7,6 +7,11 @@ id integer unsigned auto_increment primary key not null,
 nome varchar(255) not null
 )engine = InnoDB;
 
+create table tipoProduto(
+id integer unsigned auto_increment not null primary key,
+nome varchar(255)
+)engine = InnoDB;
+
 create table produtos(
 id Integer unsigned auto_increment primary key not null,
 nome varchar(255) not null,
@@ -15,10 +20,11 @@ descricao varchar(255) not null,
 usado Integer unsigned not null,
 categoria_id Integer unsigned not null,
 isbn varchar(255),
-tipoProduto varchar(255) not null,
+tipoProduto Integer unsigned not null,
 waterMark varchar(255),
-taxaImpressao varchar(255),
-foreign key(categoria_id) references categorias(id)
+taxaImpressao varchar(255), 
+foreign key(categoria_id) references categorias(id),
+foreign key(tipoProduto) references tipoProduto(id)
 )engine = InnoDB;
 
 insert into categorias (nome) values ("Esporte"), ("Escolar"), ("Mobilidade");

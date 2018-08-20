@@ -33,7 +33,6 @@ class ProdutoDao{
     }
 
     function insereProduto(Produto $produto){
-
         if ($produto->isIsbn()) {
             $isbn = $produto->getIsbn($isbn);
         }else{

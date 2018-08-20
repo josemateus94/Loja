@@ -3,6 +3,7 @@
 require_once("Cabecalho.php");
 require_once("../Controller/CategoriaController.php");
 require_once("../Controller/ProdutoController.php");
+require_once("../Controller/TipoProdutoController.php");
 require_once("../Filters/UsuarioFilters.php");
 
 ?>
@@ -13,8 +14,9 @@ $id = isset($_POST['id'])? $_POST['id']: false;
 $action = "../Routes/Routes.php"; 
 
 $categoria = new Categoria();
+$tipo = new TipoProduto();
 $categoria->setId(1); 
-$produto = array(new LivroFisico(null, null, null, $categoria, null, null));
+$produto = array(new LivroFisico(null, null, null, $categoria, null, $tipo));
 
 $usado="";
 if ($id) {
@@ -61,13 +63,12 @@ if ($id) {
             <td onclick="ativo()" onkeyup="ativo()">                
                 <select name="tipoProduto" id="tipoProduto">                    
                     <?php
-                        $tipos = array('Livro Fisico', 'Ebook');                        
-                        foreach($tipos as $key=>$tipo):
-                            $tipoSemEspaco = str_replace(" ", "", $tipo);
-                        $tipoProduto = $produto[0]->getTipoProduto() == $tipoSemEspaco;
+                                              
+                        foreach(TipoProdutoController::lista() as $key=>$tipo):
+                        $tipoProduto = $produto[0]->getTipoProduto() == $tipo->getNome();
                     ?>
-                    <option <?php echo ($tipoProduto ? "selected='selected'":""); ?> value="<?= $tipoSemEspaco ?>">   
-                        <?= $tipo ?>
+                    <option <?php echo ($tipoProduto ? "selected='selected'":""); ?> value="<?= $tipo->getId(); ?>">   
+                        <?= $tipo->getNome(); ?>
                     </option>
                     <?php endforeach; ?>
                 </select>                        
@@ -103,18 +104,18 @@ if ($id) {
 
 <script>
     function ativo(){
-        if ($("#tipoProduto").val() == "LivroFisico") {
+        if ($("#tipoProduto").val() == 1) {//LivroFisico
             $("#taxaImpressao").removeClass("ativo");
             $("#waterMark").addClass("ativo");
-        } else if ($("#tipoProduto").val() == "Ebook") {
+        } else {
             $("#waterMark").removeClass("ativo");
             $("#taxaImpressao").addClass("ativo");
         }
     }
-    if ($("#tipoProduto").val() == "LivroFisico") {
+    if ($("#tipoProduto").val() == 1) { //LivroFisico
         $("#taxaImpressao").removeClass("ativo");
         $("#waterMark").addClass("ativo");
-    } else if ($("#tipoProduto").val() == "Ebook") {
+    } else {
         $("#waterMark").removeClass("ativo");
         $("#taxaImpressao").addClass("ativo");
     }

@@ -11,7 +11,7 @@ abstract class Produto{
     private $isbn;
     private $tipoProduto;
     
-    function __construct($nome, $preco, $descricao, Categoria $categoria, $usado, $tipoProduto){
+    function __construct($nome, $preco, $descricao, Categoria $categoria, $usado, TipoProduto $tipoProduto){
         $this->nome = $nome;
         $this->preco = $preco;
         $this->descricao = $descricao;

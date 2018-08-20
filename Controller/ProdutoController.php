@@ -7,15 +7,18 @@ require_once("../Model/Categoria.php");
 require_once("../Model/Livro.php");
 require_once("../Model/LivroFisico.php");
 require_once("../Model/Ebook.php");
+require_once("../Model/TipoProduto.php");
 require_once("CriadorProdutos.php");
 
 class ProdutoController{
     
     private $produtoDao;
     private $categoria;
+    private $tipoProduto;
     public function __construct(){        
         $this->produtoDao = new ProdutoDao();
         $this->categoria = new Categoria();
+        $this->tipoProduto = new TipoProduto();
     }
     
     public function remover(){
