@@ -32,7 +32,7 @@ $produtoController = new ProdutoController();
                 <td><?= substr($produto->getDescricao(), 0, 40) ?></td>
                 <td><?= $produto->getCategoria()->getNome(); ?></td>
                 <td><?= ($produto->getUsado() == 1) ? "usado" : "novo"; ?></td>
-                <td><?= $produto->getTipoProduto(); ?></td>
+                <td><?= $produto->getTipoProduto()->getNome(); ?></td>
                 <td><?php if($produto->isIsbn()){ echo($produto->getIsbn());} ?></td>
                 <?php if(UsuarioFilters::usuarioEstaLogado()): ?>
                     <td>
