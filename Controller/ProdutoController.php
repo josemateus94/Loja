@@ -31,14 +31,17 @@ class ProdutoController{
     
     public function alterar(){
         $isbn =  !empty($_POST['isbn']) ? $_POST['isbn'] : null;
-        $tipoProduto = $_POST['tipoProduto'];
+        $this->tipoProduto->setId($_POST['tipoProduto']);
         $this->categoria->setId($_POST["categoria_id"]);
-        $waterMark =  !empty($_POST['waterMark']) ? $_POST['waterMark'] : null;
-        $impostoSobreItem =  !empty($_POST['taxaImpressao']) ? $_POST['taxaImpressao'] : null;
+        if ($this->tipoProduto->getId()== 1) {
+            $impostoSobreItem =  !empty($_POST['taxaImpressao']) ? $_POST['taxaImpressao'] : null;    
+        }else{
+            $waterMark =  !empty($_POST['waterMark']) ? $_POST['waterMark'] : null;
+        }
         $dados = array("waterMark"=>$waterMark, "impostoSobreItem"=>$impostoSobreItem);
 
         $criadorProdutos = new CriadorProdutos();
-        $produto = $criadorProdutos->criaPor($tipoProduto, $_POST, $this->categoria);
+        $produto = $criadorProdutos->criaPor( $this->tipoProduto, $_POST, $this->categoria);
         $produto->atualizaDados($produto, $isbn, $dados);
         
         $produto->setId($_POST['id']);
@@ -79,18 +82,18 @@ class ProdutoController{
     public function lista($id=null){
         $produtos = array();   
         $listaprodutos = $this->produtoDao->listaProdutos($id);
-        foreach($listaprodutos as $listaproduto){            
+        foreach($listaprodutos as $listaproduto){       
             $isbn =  !empty($listaproduto['isbn']) ? $listaproduto['isbn'] : null;
             $this->tipoProduto->setId($listaproduto['tipoProduto']);
             $this->tipoProduto->setNome($listaproduto['tipoNome']);
-            //var_dump($listaproduto['tipoNome']);
+
             $waterMark =  !empty($listaproduto['waterMark']) ? $listaproduto['waterMark'] : null;
             $impostoSobreItem =  !empty($listaproduto['taxaImpressao']) ? $listaproduto['taxaImpressao'] : null;
             $dados = array("waterMark"=>$waterMark, "impostoSobreItem"=>$impostoSobreItem);
 
             $this->categoria->setNome($listaproduto['categoria_nome']); 
-            $itens = array("nome"=>$listaproduto['nome'], "preco"=> $listaproduto['preco'], "descricao"=> $listaproduto['descricao'], 
-                            "usado"=> $listaproduto['usado']);
+            $itens = array("nome"=>$listaproduto['nome'], "preco"=> $listaproduto['preco'], 
+                            "descricao"=> $listaproduto['descricao'], "usado"=> $listaproduto['usado']);
             $criadorProdutos = new CriadorProdutos();
             $produto = $criadorProdutos->criaPor($this->tipoProduto, $itens, $this->categoria);
             $produto->atualizaDados($produto, $isbn, $dados);   
@@ -98,6 +101,7 @@ class ProdutoController{
             $produto->setId($listaproduto['id']);
             array_push($produtos, $produto);
             $this->categoria = new Categoria();
+            $this->tipoProduto = new TipoProduto();
         }
         return $produtos;
     }

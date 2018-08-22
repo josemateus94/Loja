@@ -115,7 +115,7 @@ class ProdutoDao{
             $pdt->bindParam(":usado", $produto->getUsado(), PDO::PARAM_BOOL);
             $pdt->bindParam(":id", $produto->getId(), PDO::PARAM_INT);
             $pdt->bindParam(":isbn", $produto->getIsbn(), PDO::PARAM_STR);
-            $pdt->bindParam(":tipoProduto", $produto->getTipoProduto(), PDO::PARAM_STR);
+            $pdt->bindParam(":tipoProduto", $produto->getTipoProduto()->getId(), PDO::PARAM_STR);
             $pdt->bindParam(":waterMark", $waterMark, PDO::PARAM_STR);
             $pdt->bindParam(":taxaImpressao", $taxaImpressao, PDO::PARAM_STR);
 

@@ -65,7 +65,7 @@ if ($id) {
                     <?php
                                               
                         foreach(TipoProdutoController::lista() as $key=>$tipo):
-                        $tipoProduto = $produto[0]->getTipoProduto() == $tipo->getNome();
+                        $tipoProduto = $produto[0]->getTipoProduto()->getNome() == $tipo->getNome();
                     ?>
                     <option <?php echo ($tipoProduto ? "selected='selected'":""); ?> value="<?= $tipo->getId(); ?>">   
                         <?= $tipo->getNome(); ?>

@@ -12,8 +12,8 @@ class CriadorProdutos{
         
         foreach(TipoProdutoController::lista() as $class){            
             if ($tipoProduto->getId() == $class->getId()) {
-                $nome = $class->getNome();
-                return new $nome($nome, $preco, $descricao, $categoria, $usado, $tipoProduto);
+                $tipoNome = $class->getNome();
+                return new $tipoNome($nome, $preco, $descricao, $categoria, $usado, $tipoProduto);
             }      
         }
         return new LivroFisico($nome, $preco, $descricao, $categoria, $usado, $tipoProduto);
