@@ -1,7 +1,7 @@
 <?php
 require_once("Cabecalho.php");
 ?>
-    <form action="EnviaContato.php" method="post">
+    <form action="../Controller/EnviaContato.php" method="post">
         <table class="table">
             <tr>
                 <td>Nome </td>
